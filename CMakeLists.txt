@@ -25,6 +25,16 @@ add_executable(${PROJECT_NAME} source_subfolder/shell.c
                             source_subfolder/sqlite3.h
                             source_subfolder/sqlite3ext.h)
 
+if (UNIX)
+    set(THREADS_PREFER_PTHREAD_FLAG ON)
+    find_package(Threads REQUIRED)
+
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE Threads::Threads
+        PRIVATE ${CMAKE_DL_LIBS}
+    )
+endif(UNIX)
+
 if(ENABLE_JSON1)
     target_compile_definitions(${PROJECT_NAME} PRIVATE SQLITE_ENABLE_JSON1)
 endif()
